@@ -1,0 +1,14 @@
+version: '2'
+services:
+  CC-Main-Postgres:
+    image: 'postgres:11-alpine'
+    labels:
+      'com.example.description': 'This is the Main Postgres DB Server for the CC system'
+    environment:
+      POSTGRES_PASSWORD: 'L6U4SHntMRPz9KHRKZjrzbWq'
+      POSTGRES_USER: 'ccIPaddress'
+    volumes:
+      - '/media/Docker-Data/CommandControl/postgres-data:/var/lib/postgresql/data'
+      - '/media/Docker-Data/CommandControl/Configs/my-postgres.conf:/etc/postgresql/postgresql.conf'
+    ports:
+      - '5432:5432'
