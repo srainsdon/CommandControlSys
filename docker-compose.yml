@@ -1,14 +1,41 @@
-version: '2'
+version: '3'
 services:
-  CC-Main-Postgres:
-    image: 'postgres:11-alpine'
+  CC-IP-Import:
+    depends_on:
+    - CC-Main-Postgres
+    expose:
+    - '8081'
+    image: build CC-IP/.
     labels:
-      'com.example.description': 'This is the Main Postgres DB Server for the CC system'
-    environment:
-      POSTGRES_PASSWORD: 'L6U4SHntMRPz9KHRKZjrzbWq'
-      POSTGRES_USER: 'ccIPaddress'
-    volumes:
-      - '/media/Docker-Data/CommandControl/postgres-data:/var/lib/postgresql/data'
-      - '/media/Docker-Data/CommandControl/Configs/my-postgres.conf:/etc/postgresql/postgresql.conf'
+      io.skopos.dt.CC-Main-Postgres: _
+      io.skopos.lb.name: Main_GW
+      io.skopos.lb.position: 240,100
+      io.skopos.visual.position: 570,300
     ports:
-      - '5432:5432'
+    - 5432:5432
+  CC-Main-Postgres:
+    environment:
+      POSTGRES_PASSWORD: L6U4SHntMRPz9KHRKZjrzbWq
+      POSTGRES_USER: ccIPaddress
+    expose:
+    - '5432'
+    image: postgres:11-alpine
+    labels:
+      com.example.description: 'This is the Main Postgres DB Server for the
+
+        CC system'
+      io.skopos.lb.name: Main_GW
+      io.skopos.lb.position: 240,100
+      io.skopos.visual.position: 790,100
+    ports:
+    - 5432:5432
+    volumes:
+    - source: CC-Main-Postgres_vol1
+      target: /etc/postgresql/postgresql.conf
+      type: volume
+    - source: CC-Main-Postgres_vol0
+      target: /var/lib/postgresql/data
+      type: volume
+volumes:
+  CC-Main-Postgres_vol0: /media/Docker-Data/CommandControl/Configs/postgres.conf
+  CC-Main-Postgres_vol1: /media/Docker-Data/CommandControl/Configs/postgres-data
